@@ -18,9 +18,9 @@ RUN apt-get update \
 COPY ./install/brave $INST_SCRIPTS/brave/
 RUN bash $INST_SCRIPTS/brave/install_brave.sh  && rm -rf $INST_SCRIPTS/brave/
 
-# install vscode
-COPY ./install/vs_code $INST_SCRIPTS/vs_code/
-RUN bash $INST_SCRIPTS/vs_code/install_vs_code.sh  && rm -rf $INST_SCRIPTS/vs_code/
+# install cursor
+COPY ./install/cursor $INST_SCRIPTS/cursor/
+RUN bash $INST_SCRIPTS/cursor/install_cursor.sh  && rm -rf $INST_SCRIPTS/cursor/
 
 USER 1000
 # install plugins
@@ -36,6 +36,10 @@ RUN bash $INST_SCRIPTS/autorecon/install_autorecon.sh && rm -rf $INST_SCRIPTS/au
 # install keepassxc
 COPY ./install/otherpkgs $INST_SCRIPTS/otherpkgs/
 RUN bash $INST_SCRIPTS/otherpkgs/install_otherpkgs.sh && rm -rf $INST_SCRIPTS/otherpkgs/
+
+# install tailscale and bring it up as an exit node
+RUN curl -fsSL https://tailscale.com/install.sh | sh && \
+    sudo tailscale up --auth-key=$TAILSCALE_AUTH_KEY --advertise-exit-node
 
 ######### End Customizations ###########
 
